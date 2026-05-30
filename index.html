@@ -188,9 +188,33 @@
   footer p { font-size: 0.82rem; color: rgba(255,255,255,0.45); }
 
   /* WSP FLOTANTE REDONDO */
-  .wsp-float { position: fixed; bottom: 28px; right: 28px; z-index: 999; width: 60px; height: 60px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 24px rgba(37,211,102,0.4); text-decoration: none; transition: transform 0.2s, background-color 0.2s; }
-  .wsp-float:hover { transform: scale(1.08); background-color: #1ebe5c; }
-  .wsp-float svg { fill: #fff; width: 32px; height: 32px; }
+ .wsp-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 999;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;         /* Clave para centrar */
+  align-items: center;     /* Clave para centrar verticalmente */
+  justify-content: center;  /* Clave para centrar horizontalmente */
+  box-shadow: 0 4px 24px rgba(37,211,102,0.4);
+  text-decoration: none;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.wsp-float:hover {
+  transform: scale(1.08);
+  background-color: #1ebe5c;
+}
+
+.wsp-float svg {
+  fill: #fff;
+  width: 32px;
+  height: 32px;
+}
 
   /* RESPONSIVE RESPONSABLE */
   @media (max-width: 992px) {
