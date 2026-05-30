@@ -286,6 +286,48 @@
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .wsp-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0.8rem 1.2rem; }
+    .nav-logo img { height: 38px; }
+    .nav-logo-text { font-size: 1rem; }
+    .nav-links a:not(.nav-wsp) { display: none; }
+    .nav-wsp { padding: 7px 12px !important; font-size: 0.8rem; }
+
+    .hero { padding: 5rem 1.5rem 3rem; min-height: auto; }
+    .hero-logo-float { display: none; }
+    .hero h1 { font-size: 3rem; }
+    .hero-sub { font-size: 0.95rem; }
+    .hero-ctas { flex-direction: column; }
+    .btn-primary, .btn-ghost { width: 100%; justify-content: center; }
+
+    .strip { padding: 12px 1.5rem; gap: 1rem; }
+    .strip-item:nth-child(n+3) { display: none; }
+
+    .info-bar { flex-direction: column; }
+    .info-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 1rem 1.5rem; min-width: unset; }
+    .info-card:last-child { border-bottom: none; }
+
+    .section { padding: 3.5rem 1.5rem; }
+    .cards { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .card { padding: 1.4rem 1.2rem; }
+    .card-icon { width: 34px; height: 34px; }
+
+    .contact-section { grid-template-columns: 1fr; gap: 2rem; padding: 3.5rem 1.5rem; }
+
+    .map-section { padding: 0 1.5rem 3.5rem; }
+    .map-wrapper iframe { height: 260px; }
+
+    footer { flex-direction: column; text-align: center; padding: 1.8rem 1.5rem; gap: 0.5rem; }
+    .footer-logo { justify-content: center; }
+
+    .wsp-float { bottom: 18px; right: 18px; width: 52px; height: 52px; }
+  }
+
+  @media (max-width: 420px) {
+    .cards { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.6rem; }
+  }
 </style>
 </head>
 <body>
