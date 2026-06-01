@@ -153,7 +153,7 @@
   .marca-item:hover { box-shadow: 0 6px 24px rgba(27,78,155,0.1); transform: translateY(-3px); background: #fff; border-color: rgba(27,78,155,0.15); }
   .marca-item img { max-height: 55px; width: auto; max-width: 140px; object-fit: contain; filter: grayscale(20%); transition: filter 0.2s; }
   .marca-item:hover img { filter: grayscale(0%); }
-
+  
   /* CONTACTO SECT */
   .contact-section { padding: 6rem 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; background: var(--gris); }
   .contact-desc { font-size: 0.97rem; color: var(--gris-texto); line-height: 1.7; margin-bottom: 2.5rem; }
@@ -246,6 +246,21 @@
     .hero h1 { font-size: 2.5rem; }
     .nav-logo-text { font-size: 1rem; }
   }
+.resenas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .resena-card { background: #fff; border: 1px solid rgba(27,78,155,0.1); border-radius: 10px; padding: 1.6rem; transition: box-shadow 0.2s, transform 0.2s; }
+  .resena-card:hover { box-shadow: 0 6px 24px rgba(27,78,155,0.1); transform: translateY(-2px); }
+  .resena-header { display: flex; align-items: center; gap: 12px; margin-bottom: 0.8rem; }
+  .resena-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--azul); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .resena-nombre { font-weight: 600; font-size: 0.9rem; color: var(--negro); }
+  .resena-fecha { font-size: 0.78rem; color: var(--gris-texto); }
+  .resena-estrellas { color: #FBBC04; font-size: 1rem; margin-bottom: 0.6rem; letter-spacing: 2px; }
+  .resena-texto { font-size: 0.86rem; color: var(--gris-texto); line-height: 1.6; }
+  .btn-google { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: var(--azul-oscuro); border: 1px solid rgba(27,78,155,0.2); font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; padding: 12px 24px; border-radius: 6px; transition: box-shadow 0.2s, transform 0.15s; }
+  .btn-google:hover { box-shadow: 0 4px 16px rgba(27,78,155,0.12); transform: translateY(-2px); }
+  
+  @media (max-width: 768px) { .resenas-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { .resenas-grid { grid-template-columns: 1fr; } }
+ 
 </style>
 </head>
 <body>
@@ -357,6 +372,69 @@
   </div>
 </section>
 
+ <!-- RESEÑAS -->
+<section class="section" id="resenas">
+  <div class="section-label">Lo que dicen nuestros clientes</div>
+  <div class="section-title">Reseñas de Google</div>
+  <div class="resenas-grid">
+
+    <div class="resena-card">
+      <div class="resena-header">
+        <div class="resena-avatar">C</div>
+        <div>
+          <div class="resena-nombre">Charly Appendino</div>
+          <div class="resena-fecha">Hace 7 meses</div>
+        </div>
+      </div>
+      <div class="resena-estrellas">★★★★★</div>
+      <p class="resena-texto">Excelente atención, mejores precios, productos de muy alta calidad. Gente que sabe de electricidad! Genial!</p>
+    </div>
+
+    <div class="resena-card">
+      <div class="resena-header">
+        <div class="resena-avatar">G</div>
+        <div>
+          <div class="resena-nombre">Gaston Cancelo</div>
+          <div class="resena-fecha">Hace 2 años</div>
+        </div>
+      </div>
+      <div class="resena-estrellas">★★★★★</div>
+      <p class="resena-texto">Excelente atención al cliente. Éxitos sigan así</p>
+    </div>
+
+    <div class="resena-card">
+      <div class="resena-header">
+        <div class="resena-avatar">J</div>
+        <div>
+          <div class="resena-nombre">Julian Costanzo</div>
+          <div class="resena-fecha">Hace un mes</div>
+        </div>
+      </div>
+      <div class="resena-estrellas">★★★★★</div>
+      <p class="resena-texto">Excelente servicio, el chico de anteojos negros y borcegos es un divino</p>
+    </div>
+
+    <div class="resena-card">
+      <div class="resena-header">
+        <div class="resena-avatar">L</div>
+        <div>
+          <div class="resena-nombre">Luciano Manresa</div>
+          <div class="resena-fecha">Hace un mes</div>
+        </div>
+      </div>
+      <div class="resena-estrellas">★★★★★</div>
+      <p class="resena-texto">Excelente precios y muy buena atención!</p>
+    </div>
+
+  </div>
+
+  <div style="text-align:center; margin-top:2.5rem;">
+    <a href="https://www.google.com/maps/search/Electro+Pergamino+SRL" target="_blank" class="btn-google">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="none"/><path d="M21.35 11.1l-8-8a1 1 0 00-1.41 0l-8 8A1 1 0 004 12.51V20a1 1 0 001 1h5v-6h4v6h5a1 1 0 001-1v-7.49a1 1 0 00-.65-.91z" fill="none"/><path d="M12.545 10.239v1.698h2.333c-.183.836-.98 2.456-2.333 2.456-1.404 0-2.549-1.162-2.549-2.596s1.145-2.596 2.549-2.596c.799 0 1.334.341 1.639.635l1.116-1.074C14.422 8.148 13.556 7.75 12.545 7.75c-2.422 0-4.387 1.962-4.387 4.387s1.965 4.387 4.387 4.387c2.533 0 4.211-1.779 4.211-4.284 0-.288-.031-.506-.069-.701h-4.142z"/></svg>
+      Ver todas las reseñas en Google
+    </a>
+  </div>
+</section>
 <section class="contact-section" id="contacto">
   <div>
     <div class="section-label">Atención inmediata</div>
