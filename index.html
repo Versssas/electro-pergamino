@@ -73,6 +73,19 @@
     content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%;
     border: 1px solid rgba(227,30,36,0.1); right: 0px; top: 50%; transform: translateY(-50%);
   }
+  .hero-logo-bg{
+  position: absolute;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 500px;
+  height: 500px;
+  object-fit: contain;
+  opacity: 0.08; /* transparencia */
+  pointer-events: none;
+  z-index: 0;
+  filter: brightness(0) invert(1); /* lo deja blanco */
+}
   .hero-content { position: relative; z-index: 1; max-width: 620px; }
   .hero-eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
@@ -286,6 +299,7 @@
 <section class="hero">
   <div class="hero-circles"></div>
   <img class="hero-logo-float" src="logo.png" alt="" />
+  <img src="logo.png" alt="" class="hero-logo-bg">
   <div class="hero-content">
     <span class="hero-eyebrow">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
