@@ -75,16 +75,15 @@
   }
   .hero-logo-bg{
   position: absolute;
-  right: 8%;
+  right: -100px;
   top: 50%;
   transform: translateY(-50%);
-  width: 500px;
-  height: 500px;
-  object-fit: contain;
-  opacity: 0.08; /* transparencia */
+  width: 700px;
+  max-width: none;
+  opacity: 0.12;
   pointer-events: none;
   z-index: 0;
-  filter: brightness(0) invert(1); /* lo deja blanco */
+  filter: brightness(0) invert(1);
 }
   .hero-content { position: relative; z-index: 1; max-width: 620px; }
   .hero-eyebrow {
@@ -247,7 +246,7 @@
   }
   @media (max-width: 768px) {
     .nav-links a:not(.nav-wsp) { display: none; }
-    .hero-logo-float { position: absolute; right: 8%; top: 50%; transform: translateY(-50%); z-index: 1; width: 340px; height: 340px; opacity: 0.08; object-fit: contain; filter: brightness(0) invert(1);}
+    .hero-logo-bg { position: absolute; right: 8%; top: 50%; transform: translateY(-50%); z-index: 1; width: 340px; height: 340px; opacity: 0.08; object-fit: contain; filter: brightness(0) invert(1);}
     .hero h1 { font-size: 3rem; }
     .strip { padding: 12px 2rem; }
     .cards { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -298,7 +297,6 @@
 
 <section class="hero">
   <div class="hero-circles"></div>
-  <img class="hero-logo-float" src="logo.png" alt="" />
   <img src="logo.png" alt="" class="hero-logo-bg">
   <div class="hero-content">
     <span class="hero-eyebrow">
