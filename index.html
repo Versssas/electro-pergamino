@@ -64,26 +64,17 @@
     display: flex; align-items: center; padding: 6rem 4rem 4rem;
     position: relative; overflow: hidden;
   }
-  .hero-circles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-  .hero-circles::before {
-    content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
-    border: 1px solid rgba(227,30,36,0.18); right: -100px; top: 50%; transform: translateY(-50%);
-  }
-  .hero-circles::after {
-    content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%;
-    border: 1px solid rgba(227,30,36,0.1); right: 0px; top: 50%; transform: translateY(-50%);
-  }
+
   .hero-logo-bg{
   position: absolute;
-  right: -100px;
+  right: 100px;
   top: 50%;
   transform: translateY(-50%);
-  width: 700px;
+  width: 600px;
   max-width: none;
-  opacity: 0.12;
+  opacity: 0.2;
   pointer-events: none;
   z-index: 0;
-  filter: brightness(0) invert(1);
 }
   .hero-content { position: relative; z-index: 1; max-width: 620px; }
   .hero-eyebrow {
