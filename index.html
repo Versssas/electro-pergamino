@@ -139,7 +139,7 @@
   .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800; text-transform: uppercase; line-height: 1; color: var(--azul-oscuro); margin-bottom: 3.5rem; }
 
   /* CARDS PRODUCTOS */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .card { background: #fff; border: 1px solid rgba(27,78,155,0.1); border-radius: 10px; padding: 2rem 1.8rem; transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s; position: relative; overflow: hidden; }
   .card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--rojo); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
   .card:hover { box-shadow: 0 8px 32px rgba(27,78,155,0.12); transform: translateY(-3px); border-color: rgba(27,78,155,0.2); }
