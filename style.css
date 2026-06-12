@@ -232,11 +232,13 @@
     .hero h1 { font-size: 3rem; }
     .strip { padding: 12px 2rem; }
     .cards { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .marcas-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
     footer { flex-direction: column; text-align: center; }
   }
   @media (max-width: 480px) {
     .cards { grid-template-columns: 1fr; }
     .hero h1 { font-size: 2.5rem; }
+    .marcas-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
     .nav-logo-text { font-size: 1rem; }
   }
 .resenas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
