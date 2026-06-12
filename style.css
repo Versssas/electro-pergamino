@@ -202,6 +202,7 @@
   overflow: visible; 
 }
 
+
 .wsp-float:hover {
   transform: scale(1.08);
   background-color: #1ebe5c;
@@ -266,3 +267,28 @@
   .card:nth-child(4) { transition-delay: 0.45s; }
   .card:nth-child(5) { transition-delay: 0.6s; }
   .card:nth-child(6) { transition-delay: 0.75s; }
+
+  .marca-item.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .marca-item:nth-child(1) { transition-delay: 0s; }
+  .marca-item:nth-child(2) { transition-delay: 0.15s; }
+  .marca-item:nth-child(3) { transition-delay: 0.3s; }
+  .marca-item:nth-child(4) { transition-delay: 0.45s;   }
+  .marca-item:nth-child(5) { transition-delay: 0.6s; }
+  .marca-item:nth-child(6) { transition-delay: 0.75s; }
+
+  .fade-up {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .resena-card:nth-child(1) { transition-delay: 0s; }
+  .resena-card:nth-child(2) { transition-delay: 0.15s; }
+  .resena-card:nth-child(3) { transition-delay: 0.3s; }
+  .resena-card:nth-child(4) { transition-delay: 0.45s; }
