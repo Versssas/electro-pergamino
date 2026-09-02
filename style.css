@@ -1,4 +1,9 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--rojo); outline-offset: 3px; border-radius: 4px;
+  }
+  h1, h2, .section-title { text-wrap: balance; }
   :root {
     --azul: #1B4E9B;
     --azul-oscuro: #0f3270;
@@ -91,6 +96,7 @@
     box-shadow: 0 4px 14px rgba(223,30,36,0.3);
   }
   .btn-primary:hover { background: var(--rojo-dark); transform: translateY(-2px); }
+  .btn-primary:active { transform: translateY(0) scale(0.97); }
   .btn-ghost {
     display: inline-flex; align-items: center; gap: 10px;
     background: rgba(255,255,255,0.1); color: #fff; font-family: 'Barlow Condensed', sans-serif;
@@ -98,6 +104,7 @@
     padding: 13px 26px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.25); transition: background 0.2s;
   }
   .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+  .btn-ghost:active { transform: scale(0.97); }
  
   /* STRIP */
   .strip { background: var(--rojo); padding: 15px 4rem; display: flex; gap: 2.5rem; align-items: center; flex-wrap: wrap; }
@@ -129,7 +136,9 @@
   .section { padding: 6rem 4rem; }
   .section-bg { background: var(--gris); }
   .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rojo); margin-bottom: 0.8rem; }
-  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800; text-transform: uppercase; line-height: 1; color: var(--azul-oscuro); margin-bottom: 3.5rem; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800; text-transform: uppercase; line-height: 1; color: var(--azul-oscuro); margin-bottom: 1.4rem; position: relative; padding-left: 1.1rem; }
+  .section-title::before { content: ''; position: absolute; left: 0; top: 0.15em; bottom: 0.15em; width: 4px; background: var(--rojo); border-radius: 2px; }
+  .catalogo-filtros, .cards, .marcas-grid, .resenas-grid { margin-top: 2.1rem; }
 
   /* CARDS PRODUCTOS */
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -151,6 +160,7 @@
   }
   .filtro-btn:hover { border-color: var(--azul); }
   .filtro-btn.active { background: var(--azul); color: #fff; border-color: var(--azul); }
+  .filtro-btn:active { transform: scale(0.96); }
   .catalogo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
   .prod-card {
     background: #fff; border: 1px solid rgba(27,78,155,0.1); border-radius: 10px;
@@ -169,6 +179,7 @@
     transition: background 0.2s, color 0.2s;
   }
   .prod-wsp:hover { background: #25D366; color: #fff; }
+  .prod-wsp:active { transform: scale(0.97); }
   @media (max-width: 768px) { .catalogo-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 480px) { .catalogo-grid { grid-template-columns: 1fr; } }
 
@@ -198,9 +209,11 @@
   .wsp-box p { font-size: 0.88rem; color: var(--gris-texto); line-height: 1.6; max-width: 240px; }
   .btn-wsp { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; padding: 14px 28px; border-radius: 6px; width: 100%; justify-content: center; transition: background 0.2s, transform 0.15s; box-shadow: 0 4px 12px rgba(37,211,102,0.2); }
   .btn-wsp:hover { background: #1ebe5c; transform: translateY(-2px); }
+  .btn-wsp:active { transform: scale(0.97); }
   .wsp-num { font-size: 0.8rem; color: var(--gris-texto); }
   .btn-ig { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; padding: 14px 28px; border-radius: 6px; width: 100%; justify-content: center; transition: opacity 0.2s, transform 0.15s; box-shadow: 0 4px 12px rgba(220,39,67,0.2); }
   .btn-ig:hover { opacity: 0.88; transform: translateY(-2px); }
+  .btn-ig:active { transform: scale(0.97); }
 
   /* MAPA COMPLETO */
   .map-section { padding: 0 4rem 6rem; background: var(--gris); }
@@ -239,6 +252,9 @@
 .wsp-float:hover {
   transform: scale(1.08);
   background-color: #1ebe5c;
+}
+.wsp-float:active {
+  transform: scale(0.96);
 }
 
 .wsp-float svg {
