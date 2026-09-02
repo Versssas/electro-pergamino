@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.card').forEach(el => observer.observe(el));
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
   renderCatalogo('todos');
@@ -58,5 +57,26 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
       renderCatalogo(btn.dataset.cat);
     });
+  }
+
+  const nav = document.querySelector('nav');
+  if (nav) {
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  const sections = Array.from(navLinks)
+    .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+  if (sections.length) {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(a => a.classList.toggle('active-link', a.getAttribute('href') === `#${entry.target.id}`));
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    sections.forEach(s => sectionObserver.observe(s));
   }
 });
