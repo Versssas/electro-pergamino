@@ -217,8 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const spinStep = () => {
         tiltX += velX;
         tiltY += velY;
-        velX *= 0.95;
-        velY *= 0.95;
+        velX *= 0.97;
+        velY *= 0.97;
         render();
         if (Math.abs(velX) > 0.02 || Math.abs(velY) > 0.02) {
           spinFrame = requestAnimationFrame(spinStep);
@@ -230,11 +230,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       hero.addEventListener('touchstart', (e) => {
         if (!e.touches[0]) return;
+        const t = e.touches[0];
+        const rect = heroLogo.getBoundingClientRect();
+        const pad = 30;
+        const inZone = t.clientX >= rect.left - pad && t.clientX <= rect.right + pad &&
+                       t.clientY >= rect.top - pad && t.clientY <= rect.bottom + pad;
+        if (!inZone) { dragging = false; return; }
         stopSpin();
         dragging = true;
         axisLock = null;
-        startX = lastX = e.touches[0].clientX;
-        startY = lastY = e.touches[0].clientY;
+        startX = lastX = t.clientX;
+        startY = lastY = t.clientY;
         lastTime = performance.now();
         baseTiltX = tiltX;
         baseTiltY = tiltY;
@@ -257,12 +263,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (axisLock === 'x') {
-          tiltX = baseTiltX + dx * 0.3;
-          velX = ((x - lastX) * 0.3 / dt) * 16;
+          tiltX = baseTiltX + dx * 0.4;
+          const instantVel = ((x - lastX) * 0.4 / dt) * 16;
+          velX = velX * 0.75 + instantVel * 0.25;
         } else if (axisLock === 'y') {
           e.preventDefault();
-          tiltY = baseTiltY - dy * 0.3;
-          velY = (-(y - lastY) * 0.3 / dt) * 16;
+          tiltY = baseTiltY - dy * 0.4;
+          const instantVel = (-(y - lastY) * 0.4 / dt) * 16;
+          velY = velY * 0.75 + instantVel * 0.25;
         }
 
         lastX = x;
