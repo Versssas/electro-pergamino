@@ -260,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
           tiltX = baseTiltX + dx * 0.3;
           velX = ((x - lastX) * 0.3 / dt) * 16;
         } else if (axisLock === 'y') {
+          e.preventDefault();
           tiltY = baseTiltY - dy * 0.3;
           velY = (-(y - lastY) * 0.3 / dt) * 16;
         }
@@ -268,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lastY = y;
         lastTime = now;
         render();
-      }, { passive: true });
+      }, { passive: false });
 
       hero.addEventListener('touchend', () => {
         dragging = false;
