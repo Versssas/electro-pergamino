@@ -211,10 +211,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const heroRect = hero.getBoundingClientRect();
       const visible = heroRect.bottom > 0 && heroRect.top < window.innerHeight;
       if (!visible) return;
-      const angle = Math.random() * Math.PI * 2;
       const speed = 7 + Math.random() * 5;
-      velX = Math.cos(angle) * speed;
-      velY = Math.sin(angle) * speed;
+      const signedSpeed = Math.random() < 0.5 ? speed : -speed;
+      if (Math.random() < 0.5) {
+        velX = signedSpeed;
+        velY = 0;
+      } else {
+        velX = 0;
+        velY = signedSpeed;
+      }
       spinFrame = requestAnimationFrame(spinStep);
     }, 5000);
 
