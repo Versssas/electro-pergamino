@@ -19,20 +19,28 @@ const productos = [
   { nombre: "Destornillador aislado", cat: "herramientas", label: "Herramientas", desc: "Destornilladores aislados, juegos completos para electricista." },
 ];
 
+const CATALOGO_PAGE_SIZE = 6;
+let catalogoExpandido = false;
+
 function renderCatalogo(filtro) {
   const grid = document.getElementById('catalogoGrid');
+  const verMasBtn = document.getElementById('catalogoVerMas');
   if (!grid) return;
   const items = filtro === 'todos' ? productos : productos.filter(p => p.cat === filtro);
-  grid.innerHTML = items.map(p => {
+  const visibles = catalogoExpandido ? items : items.slice(0, CATALOGO_PAGE_SIZE);
+  grid.innerHTML = visibles.map(p => {
     const msg = encodeURIComponent(`Hola! Quería consultar disponibilidad y precio de: ${p.nombre}`);
     return `
-    <div class="prod-card fade-up visible">
+    <div class="prod-card">
       <span class="prod-cat">${p.label}</span>
       <div class="prod-nombre">${p.nombre}</div>
       <p class="prod-desc">${p.desc}</p>
       <a class="prod-wsp" href="https://wa.me/5492477457559?text=${msg}" target="_blank">Consultar</a>
     </div>`;
   }).join('');
+  if (verMasBtn) {
+    verMasBtn.hidden = catalogoExpandido || items.length <= CATALOGO_PAGE_SIZE;
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -46,16 +54,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const delay = Number(el.dataset.cardDelay || 0);
+      el.style.transitionDelay = `${delay}s`;
+      el.classList.add('visible');
+      setTimeout(() => { el.style.transitionDelay = ''; }, (delay + 0.6) * 1000);
+      cardObserver.unobserve(el);
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.cards .card').forEach((el, i) => {
+    el.dataset.cardDelay = Math.min(i * 0.08, 0.4);
+    cardObserver.observe(el);
+  });
+
   renderCatalogo('todos');
 
   const filtros = document.getElementById('catalogoFiltros');
+  const catalogoGrid = document.getElementById('catalogoGrid');
+
+  const renderCatalogoAnimado = (cat) => {
+    if (!catalogoGrid) {
+      renderCatalogo(cat);
+      return;
+    }
+    catalogoGrid.style.opacity = '0';
+    catalogoGrid.style.transform = 'translateY(10px)';
+    setTimeout(() => {
+      renderCatalogo(cat);
+      catalogoGrid.style.transform = 'translateY(-10px)';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          catalogoGrid.style.opacity = '1';
+          catalogoGrid.style.transform = 'translateY(0)';
+        });
+      });
+    }, 200);
+  };
+
   if (filtros) {
     filtros.addEventListener('click', (e) => {
       const btn = e.target.closest('.filtro-btn');
       if (!btn) return;
       filtros.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      renderCatalogo(btn.dataset.cat);
+      catalogoExpandido = false;
+      renderCatalogoAnimado(btn.dataset.cat);
+    });
+  }
+
+  const verMasBtn = document.getElementById('catalogoVerMas');
+  if (verMasBtn) {
+    verMasBtn.addEventListener('click', () => {
+      catalogoExpandido = true;
+      const activo = filtros ? filtros.querySelector('.filtro-btn.active') : null;
+      renderCatalogoAnimado(activo ? activo.dataset.cat : 'todos');
     });
   }
 
@@ -64,6 +119,109 @@ document.addEventListener('DOMContentLoaded', () => {
     const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  const heroLogo = document.querySelector('.hero-logo-bg');
+  const hero = document.querySelector('.hero');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (heroLogo && hero && !prefersReducedMotion) {
+    let scrollY = 0;
+    let tiltX = 0;
+    let tiltY = 0;
+    const render = () => {
+      const base = window.innerWidth <= 768 ? '' : 'translateY(-50%) ';
+      heroLogo.style.transform =
+        `${base}translateY(${scrollY}px) perspective(600px) rotateY(${tiltX}deg) rotateX(${tiltY}deg) scale(1.03)`;
+    };
+
+    let scrollTicking = false;
+    window.addEventListener('scroll', () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        const heroHeight = hero.offsetHeight;
+        const y = window.scrollY;
+        if (y < heroHeight) {
+          scrollY = y * 0.35;
+          const progress = y / heroHeight;
+          tiltX = (progress - 0.5) * 26;
+          tiltY = Math.sin(progress * Math.PI) * -10;
+        }
+        render();
+        scrollTicking = false;
+      });
+    }, { passive: true });
+
+    if (hasFinePointer) {
+      let tiltTicking = false;
+      hero.addEventListener('mousemove', (e) => {
+        if (tiltTicking) return;
+        tiltTicking = true;
+        requestAnimationFrame(() => {
+          const rect = hero.getBoundingClientRect();
+          const nx = (e.clientX - rect.left) / rect.width - 0.5;
+          const ny = (e.clientY - rect.top) / rect.height - 0.5;
+          tiltX = nx * 30;
+          tiltY = -ny * 30;
+          render();
+          tiltTicking = false;
+        });
+      });
+      hero.addEventListener('mouseleave', () => {
+        tiltX = 0;
+        tiltY = 0;
+        render();
+      });
+    }
+  }
+
+  const countEl = document.querySelector('[data-count-to]');
+  if (countEl) {
+    const target = parseInt(countEl.dataset.countTo, 10);
+    if (prefersReducedMotion) {
+      countEl.textContent = `+${target}`;
+    } else {
+      const countObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const duration = 1200;
+          const start = performance.now();
+          const step = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            countEl.textContent = `+${Math.round(eased * target)}`;
+            if (progress < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+          countObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.5 });
+      countObserver.observe(countEl);
+    }
+  }
+
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && !prefersReducedMotion) {
+    document.querySelectorAll('.card').forEach(card => {
+      let cardTicking = false;
+      card.addEventListener('mouseenter', () => { card.style.zIndex = '5'; });
+      card.addEventListener('mousemove', (e) => {
+        if (cardTicking) return;
+        cardTicking = true;
+        requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          const nx = (e.clientX - rect.left) / rect.width - 0.5;
+          const ny = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform =
+            `perspective(900px) rotateY(${nx * 7}deg) rotateX(${-ny * 7}deg) translateY(-3px) scale(1.01)`;
+          cardTicking = false;
+        });
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        card.style.zIndex = '';
+      });
+    });
   }
 
   const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');

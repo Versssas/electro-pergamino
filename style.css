@@ -83,8 +83,23 @@
   opacity: 0.5;
   pointer-events: none;
   z-index: 0;
+  transition: transform 0.15s ease-out;
+  will-change: transform;
 }
   .hero-content { position: relative; z-index: 1; max-width: 620px; }
+
+  @keyframes heroReveal {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow, .hero h1, .hero-sub, .hero-ctas {
+    animation: heroReveal 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .hero-eyebrow { animation-delay: 0.1s; }
+  .hero h1 { animation-delay: 0.22s; }
+  .hero-sub { animation-delay: 0.4s; }
+  .hero-ctas { animation-delay: 0.55s; }
+
   .hero-eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(227,30,36,0.15); border: 1px solid rgba(227,30,36,0.4);
@@ -158,9 +173,14 @@
   .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .card:nth-child(1) { grid-column: span 2; }
   .card:nth-child(6) { grid-column: span 2; }
-  .card { background: #fff; border: 1px solid rgba(27,78,155,0.1); border-radius: 10px; padding: 2rem 1.8rem; position: relative; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;}
+  .card {
+    background: #fff; border: 1px solid rgba(27,78,155,0.1); border-radius: 10px; padding: 2rem 1.8rem; position: relative; overflow: hidden;
+    opacity: 0; transform: perspective(900px) rotateY(-25deg) translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s, border-color 0.2s;
+  }
+  .card.visible { opacity: 1; transform: perspective(900px) rotateY(0deg) translateY(0); }
   .card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--rojo); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
-  .card:hover { box-shadow: 0 8px 32px rgba(27,78,155,0.1); transform: translateY(-3px); border-color: rgba(27,78,155,0.25); }
+  .card:hover { box-shadow: 0 8px 32px rgba(27,78,155,0.1); border-color: rgba(27,78,155,0.25); }
   .card:hover::after { transform: scaleX(1); }
   .card-icon { width: 42px; height: 42px; color: var(--azul); margin-bottom: 1.2rem; }
   .card-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.15rem; font-weight: 700; text-transform: uppercase; color: var(--azul-oscuro); margin-bottom: 0.5rem; }
@@ -177,7 +197,16 @@
   .filtro-btn:hover { border-color: var(--azul); }
   .filtro-btn.active { background: var(--azul); color: #fff; border-color: var(--azul); }
   .filtro-btn:active { transform: scale(0.96); }
-  .catalogo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .btn-ver-mas {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--azul);
+    background: #fff; border: 1px solid rgba(27,78,155,0.25); border-radius: 6px;
+    padding: 11px 28px; margin-top: 2rem; cursor: pointer; transition: background 0.2s, color 0.2s;
+  }
+  .btn-ver-mas:hover { background: var(--azul); color: #fff; }
+  .btn-ver-mas:active { transform: scale(0.97); }
+  .btn-ver-mas[hidden] { display: none; }
+  .catalogo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; transition: opacity 0.22s ease, transform 0.22s ease; }
   .prod-card {
     background: #fff; border: 1px solid rgba(27,78,155,0.1); border-radius: 10px;
     padding: 1.6rem; display: flex; flex-direction: column; gap: 0.6rem;
@@ -203,8 +232,11 @@
   .marcas-section { padding: 5.5rem 4rem 6.5rem; background: #fff; }
   .marcas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 3.5rem; }
   .marca-item { border-bottom: 1px solid rgba(27,78,155,0.12); padding: 24px 16px; display: flex; align-items: center; justify-content: center; min-width: 160px; height: 84px; }
-  .marca-item img { max-height: 55px; width: auto; max-width: 140px; object-fit: contain; filter: grayscale(75%); opacity: 0.75; transition: filter 0.2s, opacity 0.2s; }
-  .marca-item:hover img { filter: grayscale(0%); opacity: 1; }
+  .marca-item img { max-height: 55px; width: auto; max-width: 140px; object-fit: contain; }
+  @media (hover: hover) and (pointer: fine) {
+    .marca-item img { filter: grayscale(75%); opacity: 0.75; transition: filter 0.2s, opacity 0.2s; }
+    .marca-item:hover img { filter: grayscale(0%); opacity: 1; }
+  }
   
   /* CONTACTO SECT */
   .contact-section { padding: 5.5rem 4rem 6.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; background: var(--gris); }
@@ -261,14 +293,28 @@
   text-decoration: none;
   transition: transform 0.2s, background-color 0.2s;
   /* Clave: evita que el contenedor corte las esquinas del logo */
-  overflow: visible; 
+  overflow: visible;
 }
 
+.wsp-float::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #25D366;
+  animation: wspPing 2.6s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  z-index: -1;
+}
+@keyframes wspPing {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
 
 .wsp-float:hover {
   transform: scale(1.08);
   background-color: #1ebe5c;
 }
+.wsp-float:hover::before { animation-play-state: paused; opacity: 0; }
 .wsp-float:active {
   transform: scale(0.96);
 }
@@ -294,7 +340,8 @@
   }
   @media (max-width: 768px) {
     .nav-links a:not(.nav-wsp) { display: none; }
-    .hero-logo-bg { position: absolute; right: 8%; top: 50%; transform: translateY(-50%); z-index: 1; width: 340px; height: 340px; opacity: 0.08; object-fit: contain; filter: brightness(0) invert(1);}
+    .hero { min-height: auto; padding: 8rem 1.5rem 4rem; }
+    .hero-logo-bg { position: absolute; top: 130px; right: 30px; bottom: auto; left: auto; transform: none; z-index: 0; width: 170px; height: 170px; opacity: 0.14; object-fit: contain; filter: brightness(0) invert(1); }
     .hero h1 { font-size: 3rem; }
     .strip { padding: 12px 2rem; }
     .cards { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -334,4 +381,10 @@
   .fade-up.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    .fade-up { opacity: 1; transform: none; }
+    .card { opacity: 1; transform: none; }
   }
