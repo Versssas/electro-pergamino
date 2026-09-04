@@ -174,6 +174,111 @@ document.addEventListener('DOMContentLoaded', () => {
         render();
       });
     }
+
+    if (!hasFinePointer) {
+      let dragging = false;
+      let startX = 0;
+      let startY = 0;
+      let baseTiltX = 0;
+      let baseTiltY = 0;
+      let lastX = 0;
+      let lastY = 0;
+      let lastTime = 0;
+      let velX = 0;
+      let velY = 0;
+      let spinFrame = null;
+      let axisLock = null;
+
+      const stopSpin = () => {
+        if (spinFrame) cancelAnimationFrame(spinFrame);
+        spinFrame = null;
+        heroLogo.style.transition = '';
+      };
+
+      const shortestEquivalent = (deg) => {
+        let m = deg % 360;
+        if (m > 180) m -= 360;
+        if (m < -180) m += 360;
+        return m;
+      };
+
+      const settleToFront = () => {
+        tiltX = shortestEquivalent(tiltX);
+        tiltY = shortestEquivalent(tiltY);
+        render();
+        heroLogo.offsetHeight;
+        heroLogo.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+        tiltX = 0;
+        tiltY = 0;
+        render();
+        setTimeout(() => { heroLogo.style.transition = ''; }, 620);
+      };
+
+      const spinStep = () => {
+        tiltX += velX;
+        tiltY += velY;
+        velX *= 0.95;
+        velY *= 0.95;
+        render();
+        if (Math.abs(velX) > 0.02 || Math.abs(velY) > 0.02) {
+          spinFrame = requestAnimationFrame(spinStep);
+        } else {
+          spinFrame = null;
+          settleToFront();
+        }
+      };
+
+      hero.addEventListener('touchstart', (e) => {
+        if (!e.touches[0]) return;
+        stopSpin();
+        dragging = true;
+        axisLock = null;
+        startX = lastX = e.touches[0].clientX;
+        startY = lastY = e.touches[0].clientY;
+        lastTime = performance.now();
+        baseTiltX = tiltX;
+        baseTiltY = tiltY;
+        velX = 0;
+        velY = 0;
+      }, { passive: true });
+
+      hero.addEventListener('touchmove', (e) => {
+        if (!dragging || !e.touches[0]) return;
+        const now = performance.now();
+        const dt = Math.max(now - lastTime, 1);
+        const x = e.touches[0].clientX;
+        const y = e.touches[0].clientY;
+
+        const dx = x - startX;
+        const dy = y - startY;
+
+        if (!axisLock && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+          axisLock = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        }
+
+        if (axisLock === 'x') {
+          tiltX = baseTiltX + dx * 0.3;
+          velX = ((x - lastX) * 0.3 / dt) * 16;
+        } else if (axisLock === 'y') {
+          tiltY = baseTiltY - dy * 0.3;
+          velY = (-(y - lastY) * 0.3 / dt) * 16;
+        }
+
+        lastX = x;
+        lastY = y;
+        lastTime = now;
+        render();
+      }, { passive: true });
+
+      hero.addEventListener('touchend', () => {
+        dragging = false;
+        if (Math.abs(velX) > 0.05 || Math.abs(velY) > 0.05) {
+          spinFrame = requestAnimationFrame(spinStep);
+        } else {
+          settleToFront();
+        }
+      });
+    }
   }
 
   const countEl = document.querySelector('[data-count-to]');
