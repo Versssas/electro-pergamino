@@ -21,8 +21,8 @@ const productos = [
 
 const CATALOGO_ICONOS = {
   cables: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
-  tableros: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-  iluminacion: '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>',
+  tableros: '<rect x="4" y="2" width="16" height="20" rx="1.5"/><rect x="7" y="5.5" width="3" height="6" rx="0.6"/><rect x="14" y="5.5" width="3" height="6" rx="0.6"/><rect x="7" y="13.5" width="3" height="6" rx="0.6"/><rect x="14" y="13.5" width="3" height="6" rx="0.6"/>',
+  iluminacion: '<path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7c.5.4.8 1 .8 1.6v.7h6.4v-.7c0-.6.3-1.2.8-1.6A7 7 0 0012 2z"/>',
   caneria: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
   tomas: '<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 8h4M10 12h4M10 16h4"/>',
   herramientas: '<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>',
@@ -132,6 +132,22 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (navToggle && mobileMenu) {
+    const closeMenu = () => {
+      navToggle.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    };
+    navToggle.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      navToggle.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  }
+
   const heroLogo = document.querySelector('.hero-logo-bg');
   const hero = document.querySelector('.hero');
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -140,11 +156,67 @@ document.addEventListener('DOMContentLoaded', () => {
     let scrollY = 0;
     let tiltX = 0;
     let tiltY = 0;
+    let spinFrame = null;
+    let interacting = false;
+
     const render = () => {
       const base = window.innerWidth <= 768 ? '' : 'translateY(-50%) ';
       heroLogo.style.transform =
         `${base}translateY(${scrollY}px) perspective(600px) rotateY(${tiltX}deg) rotateX(${tiltY}deg) scale(1.03)`;
     };
+
+    const stopSpin = () => {
+      if (spinFrame) cancelAnimationFrame(spinFrame);
+      spinFrame = null;
+      heroLogo.style.transition = '';
+    };
+
+    const shortestEquivalent = (deg) => {
+      let m = deg % 360;
+      if (m > 180) m -= 360;
+      if (m < -180) m += 360;
+      return m;
+    };
+
+    const settleToFront = () => {
+      tiltX = shortestEquivalent(tiltX);
+      tiltY = shortestEquivalent(tiltY);
+      render();
+      heroLogo.offsetHeight;
+      heroLogo.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+      tiltX = 0;
+      tiltY = 0;
+      render();
+      setTimeout(() => { heroLogo.style.transition = ''; }, 620);
+    };
+
+    let velX = 0;
+    let velY = 0;
+    const spinStep = () => {
+      tiltX += velX;
+      tiltY += velY;
+      velX *= 0.97;
+      velY *= 0.97;
+      render();
+      if (Math.abs(velX) > 0.02 || Math.abs(velY) > 0.02) {
+        spinFrame = requestAnimationFrame(spinStep);
+      } else {
+        spinFrame = null;
+        settleToFront();
+      }
+    };
+
+    setInterval(() => {
+      if (interacting || spinFrame) return;
+      const heroRect = hero.getBoundingClientRect();
+      const visible = heroRect.bottom > 0 && heroRect.top < window.innerHeight;
+      if (!visible) return;
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 7 + Math.random() * 5;
+      velX = Math.cos(angle) * speed;
+      velY = Math.sin(angle) * speed;
+      spinFrame = requestAnimationFrame(spinStep);
+    }, 5000);
 
     let scrollTicking = false;
     window.addEventListener('scroll', () => {
@@ -167,6 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hasFinePointer) {
       let tiltTicking = false;
       hero.addEventListener('mousemove', (e) => {
+        interacting = true;
+        stopSpin();
         if (tiltTicking) return;
         tiltTicking = true;
         requestAnimationFrame(() => {
@@ -180,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
       hero.addEventListener('mouseleave', () => {
+        interacting = false;
         tiltX = 0;
         tiltY = 0;
         render();
@@ -195,49 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let lastX = 0;
       let lastY = 0;
       let lastTime = 0;
-      let velX = 0;
-      let velY = 0;
-      let spinFrame = null;
       let axisLock = null;
-
-      const stopSpin = () => {
-        if (spinFrame) cancelAnimationFrame(spinFrame);
-        spinFrame = null;
-        heroLogo.style.transition = '';
-      };
-
-      const shortestEquivalent = (deg) => {
-        let m = deg % 360;
-        if (m > 180) m -= 360;
-        if (m < -180) m += 360;
-        return m;
-      };
-
-      const settleToFront = () => {
-        tiltX = shortestEquivalent(tiltX);
-        tiltY = shortestEquivalent(tiltY);
-        render();
-        heroLogo.offsetHeight;
-        heroLogo.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
-        tiltX = 0;
-        tiltY = 0;
-        render();
-        setTimeout(() => { heroLogo.style.transition = ''; }, 620);
-      };
-
-      const spinStep = () => {
-        tiltX += velX;
-        tiltY += velY;
-        velX *= 0.97;
-        velY *= 0.97;
-        render();
-        if (Math.abs(velX) > 0.02 || Math.abs(velY) > 0.02) {
-          spinFrame = requestAnimationFrame(spinStep);
-        } else {
-          spinFrame = null;
-          settleToFront();
-        }
-      };
 
       hero.addEventListener('touchstart', (e) => {
         if (!e.touches[0]) return;
@@ -249,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!inZone) { dragging = false; return; }
         stopSpin();
         dragging = true;
+        interacting = true;
         axisLock = null;
         startX = lastX = t.clientX;
         startY = lastY = t.clientY;
@@ -292,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       hero.addEventListener('touchend', () => {
         dragging = false;
+        interacting = false;
         if (Math.abs(velX) > 0.05 || Math.abs(velY) > 0.05) {
           spinFrame = requestAnimationFrame(spinStep);
         } else {
