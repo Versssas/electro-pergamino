@@ -298,11 +298,13 @@
     .hero h1 { font-size: 3rem; }
     .strip { padding: 12px 2rem; }
     .cards { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card { padding: 1.5rem 1.3rem; }
     .marcas-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
     footer { flex-direction: column; text-align: center; }
   }
   @media (max-width: 480px) {
     .cards { grid-template-columns: 1fr; }
+    .card:nth-child(1), .card:nth-child(6) { grid-column: span 1; }
     .hero h1 { font-size: 2.5rem; }
     .marcas-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
     .nav-logo-text { font-size: 1rem; }
