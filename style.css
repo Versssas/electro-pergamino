@@ -340,7 +340,7 @@
     footer { padding: 2rem; }
   }
   @media (max-width: 768px) {
-    .nav-links a:not(.nav-wsp) { display: none; }
+    .nav-links a { display: none; }
     .hero { min-height: auto; padding: 8rem 1.5rem 4rem; }
     .hero-logo-bg { position: absolute; top: 130px; right: 30px; bottom: auto; left: auto; transform: none; z-index: 0; width: 170px; height: 170px; opacity: 0.14; object-fit: contain; filter: brightness(0) invert(1); }
     .hero h1 { font-size: 3rem; }
