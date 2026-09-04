@@ -214,6 +214,7 @@
     transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
   }
   .prod-card:hover { box-shadow: 0 8px 32px rgba(27,78,155,0.1); transform: translateY(-3px); border-color: rgba(27,78,155,0.25); }
+  .prod-icon { width: 30px; height: 30px; color: var(--azul); margin-bottom: 0.2rem; }
   .prod-cat { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rojo); }
   .prod-nombre { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--azul-oscuro); text-transform: uppercase; }
   .prod-desc { font-size: 0.85rem; color: var(--gris-texto); line-height: 1.5; flex-grow: 1; }

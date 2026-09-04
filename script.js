@@ -19,6 +19,15 @@ const productos = [
   { nombre: "Destornillador aislado", cat: "herramientas", label: "Herramientas", desc: "Destornilladores aislados, juegos completos para electricista." },
 ];
 
+const CATALOGO_ICONOS = {
+  cables: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
+  tableros: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
+  iluminacion: '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>',
+  caneria: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  tomas: '<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 8h4M10 12h4M10 16h4"/>',
+  herramientas: '<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>',
+};
+
 const CATALOGO_PAGE_SIZE = 6;
 let catalogoExpandido = false;
 
@@ -30,8 +39,10 @@ function renderCatalogo(filtro) {
   const visibles = catalogoExpandido ? items : items.slice(0, CATALOGO_PAGE_SIZE);
   grid.innerHTML = visibles.map(p => {
     const msg = encodeURIComponent(`Hola! Quería consultar disponibilidad y precio de: ${p.nombre}`);
+    const icono = CATALOGO_ICONOS[p.cat] || '';
     return `
     <div class="prod-card">
+      <svg class="prod-icon" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">${icono}</svg>
       <span class="prod-cat">${p.label}</span>
       <div class="prod-nombre">${p.nombre}</div>
       <p class="prod-desc">${p.desc}</p>
