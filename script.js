@@ -38,7 +38,6 @@ function renderCatalogo(filtro) {
   const items = filtro === 'todos' ? productos : productos.filter(p => p.cat === filtro);
   const visibles = catalogoExpandido ? items : items.slice(0, CATALOGO_PAGE_SIZE);
   grid.innerHTML = visibles.map(p => {
-    const msg = encodeURIComponent(`Hola! Quería consultar disponibilidad y precio de: ${p.nombre}`);
     const icono = CATALOGO_ICONOS[p.cat] || '';
     return `
     <div class="prod-card">
@@ -46,7 +45,7 @@ function renderCatalogo(filtro) {
       <span class="prod-cat">${p.label}</span>
       <div class="prod-nombre">${p.nombre}</div>
       <p class="prod-desc">${p.desc}</p>
-      <a class="prod-wsp" href="https://wa.me/5492477457559?text=${msg}" target="_blank">Consultar</a>
+      <a class="prod-wsp" href="https://wa.me/5492477457559" target="_blank">Consultar</a>
     </div>`;
   }).join('');
   if (verMasBtn) {
@@ -179,6 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const settleToFront = () => {
+      velX = 0;
+      velY = 0;
       tiltX = shortestEquivalent(tiltX);
       tiltY = shortestEquivalent(tiltY);
       render();
@@ -187,7 +188,12 @@ document.addEventListener('DOMContentLoaded', () => {
       tiltX = 0;
       tiltY = 0;
       render();
-      setTimeout(() => { heroLogo.style.transition = ''; }, 620);
+      setTimeout(() => {
+        heroLogo.style.transition = '';
+        tiltX = 0;
+        tiltY = 0;
+        render();
+      }, 620);
     };
 
     let velX = 0;
